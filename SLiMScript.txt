@@ -1,0 +1,33 @@
+// set up a simple neutral simulation
+initialize() {
+	defineConstant("simID", getSeed());
+	defineConstant("meanS", -2);
+	print(meanS);
+	
+	initializeMutationRate(1e-7);
+	
+	// m1 mutation type: neutral
+	initializeMutationType("m1", 0.5, "f", 0.0); //synonymous
+	initializeMutationType("m2", 0.1, "g", meanS, 0.2); //nonsynonsymous, deleterious from a gamma distribution
+	
+	// g1 genomic element type: nonsynonsynoums and synonymous mutations
+	initializeGenomicElementType("g1", c(m1,m2), c(3,6));
+	
+	
+	// uniform chromosome of length 100 kb with uniform recombination
+	initializeGenomicElement(g1, 0, 99999);
+	initializeRecombinationRate(1e-8);
+}
+
+// create a population of 500 individuals
+1 early() {
+	sim.addSubpop("p1", 500);
+}
+
+// output samples of 500 genomes at end- long after 10N 
+10000 late() { 
+   writeFile(filePath = '/Users/jennyjames/Desktop/GeneralScripts/'+simID+'_'+meanS+'_output.txt', contents = 'initializeGenomicElementType("g1", c(m1,m2), c(3,6))');
+   writeFile(filePath = '/Users/jennyjames/Desktop/GeneralScripts/'+simID+'_'+meanS+'_output.txt', contents = 'initializeGenomicElement(g1, 0, 99999);', append = T);
+	p1.outputSample(500, filePath = '/Users/jennyjames/Desktop/GeneralScripts/'+simID+'_'+meanS+'_output.txt', append = T);
+	
+		 }
